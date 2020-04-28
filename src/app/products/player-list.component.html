@@ -1,0 +1,139 @@
+<div class='card'>
+  <div class='card-header'>
+    {{pageTitle}}
+  </div>
+  <div class='card-body'>
+    <div class="row">
+      <ul class="nav nav-pills nav-tabs"
+          role="tablist">
+        <li class="nav-item" *ngFor='let player of players'>
+          <a  [class]="currentPlayer.playerId===player.playerId ? 'nav-link active' : 'nav-link'"
+             data-toggle="pill"
+             [href]="'players/'+player.playerId">{{player.playerName}}</a>
+        </li>
+      </ul>
+    </div>
+    <div class="row">
+      <div class="tab-content">
+        <div class="container tab-pane active"><br>
+          <h3>{{currentPlayer.playerName}} Ownership</h3>
+        </div>
+        <div>
+          <table class="table table-dark table-striped">
+            <thead>
+              <tr>
+                <th>Asset</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Cash</td>
+                <td>1000</td>
+              </tr>
+              <tr>
+                <td>Delhi</td>
+                <td>5000</td>
+              </tr>
+              <tr>
+                <td>Chennai</td>
+                <td>2000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          <table class="table">
+          <thead>
+            <tr class="table-primary">
+              <th>Total Value</th>
+              <th>{{netValue}}</th>
+            </tr>
+          </thead>
+          </table>
+        </div>
+
+
+      </div>
+  
+    </div>
+    <!-- Tab panes -->
+  </div>
+  <div class="row">
+    <div class='col-sm-2'>
+    <button type="button"
+            class="btn btn-primary"
+            [disabled]='isBuyDisabled()'>Buy Asset</button>
+    </div> 
+    <div>
+      <label>Asset:
+      <input type="text" [(ngModel)]='assetName'>  </label>      
+    </div>
+
+    <div class='col-sm-3'>
+      <label>Price:   
+      <input type="text" [(ngModel)]='buyPrice'> </label>
+    </div>
+    <!--
+    <div class='checkbox col-sm-4'>
+      <label><input type="checkbox" [(ngModel)]='isHouse'>House</label>
+    </div>
+    -->
+  </div>  
+  <br>
+
+  <div class="row">
+    <div class='col-sm-2'>
+    <button type="button"
+            class="btn btn-primary"
+            [disabled]='!assetName'>Delete Asset</button>
+    </div> 
+    <div>
+      <label>Asset:
+      <input type="text" [(ngModel)]='assetName'>  </label>      
+    </div>
+
+    <!--
+    <div class='checkbox col-sm-4'>
+      <label><input type="checkbox" [(ngModel)]='isHouse'>House</label>
+    </div>
+    -->
+  </div>  
+  <br>
+
+
+
+  <div class="row">
+    <div class='col-sm-2'>
+    <button type="button"
+            class="btn btn-primary"
+            [disabled]=isPayDisabled()>Pay Rent/Exp</button>
+    </div> 
+
+    <div class="dropdown">
+
+      <label> Pay:
+        <select id="players">
+          <option [value]="player.playerId" *ngFor='let player of getPlayerPayList()'>{{player.playerName}}</option>
+        </select>
+    </label>
+
+    </div>    
+
+    <div class='col-sm-3'>
+      <label>Cost:   
+      <input type="text" [(ngModel)]='payPrice'> </label>
+    </div>
+  </div>  
+
+  <br>
+  <div *ngIf='currentPlayer.playerId!=0'>
+    <button type="button"
+            class="btn btn-primary" (click)='updateName()'>Rename Player</button>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="text" [(ngModel)]='currentPlayer.playerName'>    
+  </div> 
+
+
+</div>
