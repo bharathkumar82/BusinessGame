@@ -16,17 +16,20 @@ export class PlayerListComponent {
   buyPrice: number;
   payPrice: number;
   assetName: string;
+  renameField: string;
   isHouse: boolean;
   netValue: number = 0;
   players: IPlayer[] = [];
   currentPlayer: IPlayer;
-  assets: IAsset[] = [];
+  assetNameDlt: string;
+  selectedPayPlayer: string = '1';
+  errorMessage: string;
 
   constructor(private route: ActivatedRoute, private router: Router, private playerService: PlayerService) {
   }
 
   ngOnInit() {
-    this.players = PlayerService.getPlayers();
+    this.players = this.playerService.getPlayers();
 
     const param = this.route.snapshot.paramMap.get('id');
     if(param) {
@@ -35,6 +38,22 @@ export class PlayerListComponent {
     else {
       this.currentPlayer = this.players[0];
     }
+    this.renameField = this.currentPlayer.playerName;
+    this.updateNetValue();
+
+    
+  }
+
+  updateNetValue() {
+    //this.netValue = this.currentPlayer.assets.map((a) => a.value).reduce(((a,b)=> (a+b)),0);
+    this.netValue = 0;
+    this.currentPlayer.assets.forEach(ast => {
+      console.log(ast.value + "  " + isNaN(ast.value));
+
+      this.netValue = this.netValue + Number(ast.value);
+    });
+
+    console.log(this.netValue);
   }
 
   isBuyDisabled() : boolean {
@@ -57,14 +76,69 @@ export class PlayerListComponent {
 
   getPlayerPayList(): IPlayer[] {
     let payList:IPlayer[] = Array.from(this.players);
-    payList = payList.filter(obj => (obj.playerId===0 || obj.playerId !== this.currentPlayer.playerId));
+    payList = payList.filter(obj => (obj.playerId !== this.currentPlayer.playerId));
     return payList;
   }
 
+
   updateName() {
     const playerId = this.currentPlayer.playerId;
-    PlayerService.getPlayers()[playerId].playerName = this.currentPlayer.playerName;
-    const tempPlayers = PlayerService.getPlayers();
+    this.currentPlayer.playerName = this.renameField;
+    this.playerService.storePlayersOnLocalStorage(this.players);
+  }
+
+  resetGame() {
+    this.playerService.resetStorage();
+
+  }
+
+  buyAsset() {
+
+    const cashAstCurrent = this.currentPlayer.assets.find(ast => ast.assetName==="Cash");
+    if(Number(cashAstCurrent)>=Number(this.buyPrice)) {
+      cashAstCurrent.value = cashAstCurrent.value - Number(this.payPrice);
+    }
+    else
+    {
+      this. errorMessage ="Amount not available";
+      return;
+    }
+        
+
+    const assets = this.currentPlayer.assets;
+    assets.push({assetName: this.assetName, value: this.buyPrice });
+    this.updateNetValue();
+    this.playerService.storePlayersOnLocalStorage(this.players);
+    this.assetName ="";
+  }
+
+  deleteAsset() {
+
+    const assets = this.currentPlayer.assets;
+    this.currentPlayer.assets = assets.filter(at => (at.assetName!=this.assetNameDlt));
+    this.updateNetValue();
+    this.playerService.storePlayersOnLocalStorage(this.players);
+    this.assetNameDlt ="";
+  }
+
+  payPlayer() {
+    console.log(this.selectedPayPlayer);
+    const cashAstCurrent = this.currentPlayer.assets.find(ast => ast.assetName==="Cash");
+    if(Number(cashAstCurrent)>=Number(this.payPrice)) {
+      cashAstCurrent.value = cashAstCurrent.value - Number(this.payPrice);
+    }
+    else
+    {
+      this. errorMessage ="Amount not available";
+      return;
+    }
+        
+
+    const tplayer = this.players.find(player => player.playerId===Number(this.selectedPayPlayer));
+    const cashAst = tplayer.assets.find(ast => ast.assetName==="Cash");
+    cashAst.value = cashAst.value + Number(this.payPrice);
+    this.playerService.storePlayersOnLocalStorage(this.players);
+    this.payPrice = null;
   }
 
 

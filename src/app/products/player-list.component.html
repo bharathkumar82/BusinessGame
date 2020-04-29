@@ -27,17 +27,9 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Cash</td>
-                <td>1000</td>
-              </tr>
-              <tr>
-                <td>Delhi</td>
-                <td>5000</td>
-              </tr>
-              <tr>
-                <td>Chennai</td>
-                <td>2000</td>
+              <tr  *ngFor='let asset of currentPlayer.assets'>
+                <td>{{asset.assetName}}</td>
+                <td>{{asset.value}}</td>
               </tr>
             </tbody>
           </table>
@@ -60,10 +52,10 @@
     </div>
     <!-- Tab panes -->
   </div>
-  <div class="row">
+  <div class="row"  *ngIf='currentPlayer.playerId!=0'>
     <div class='col-sm-2'>
     <button type="button"
-            class="btn btn-primary"
+            class="btn btn-primary" (click)='buyAsset()' 
             [disabled]='isBuyDisabled()'>Buy Asset</button>
     </div> 
     <div>
@@ -83,15 +75,15 @@
   </div>  
   <br>
 
-  <div class="row">
+  <div class="row" *ngIf='currentPlayer.playerId!=0'>
     <div class='col-sm-2'>
     <button type="button"
-            class="btn btn-primary"
-            [disabled]='!assetName'>Delete Asset</button>
+            class="btn btn-primary" (click)='deleteAsset()' 
+            [disabled]='!assetNameDlt'>Delete Asset</button>
     </div> 
     <div>
       <label>Asset:
-      <input type="text" [(ngModel)]='assetName'>  </label>      
+      <input type="text" [(ngModel)]='assetNameDlt'>  </label>      
     </div>
 
     <!--
@@ -107,14 +99,14 @@
   <div class="row">
     <div class='col-sm-2'>
     <button type="button"
-            class="btn btn-primary"
+            class="btn btn-primary" (click)='payPlayer()'
             [disabled]=isPayDisabled()>Pay Rent/Exp</button>
     </div> 
 
     <div class="dropdown">
 
       <label> Pay:
-        <select id="players">
+        <select id="players" [(ngModel)]="selectedPayPlayer">
           <option [value]="player.playerId" *ngFor='let player of getPlayerPayList()'>{{player.playerName}}</option>
         </select>
     </label>
@@ -130,10 +122,21 @@
   <br>
   <div *ngIf='currentPlayer.playerId!=0'>
     <button type="button"
-            class="btn btn-primary" (click)='updateName()'>Rename Player</button>
+            class="btn btn-primary" (click)='updateName()' [disabled]="renameField.length==0 || currentPlayer.playerName===renameField">Rename Player</button>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <input type="text" [(ngModel)]='currentPlayer.playerName'>    
+    <input id='inp1' type="text" [(ngModel)]='renameField'>    
   </div> 
 
+  <br>
+  <div *ngIf='currentPlayer.playerId===0'>
+    <button type="button"
+            class="btn btn-primary" (click)='resetGame()'>Reset Game</button>
+  </div> 
+
+  <br>
+  <div class="alert alert-danger alert-dismissible" *ngIf="errorMessage">
+    <a [href]="'players/' + currentPlayer.playerId" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <h3> {{errorMessage}}</h3>
+  </div>
 
 </div>
