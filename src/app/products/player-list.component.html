@@ -1,4 +1,4 @@
-<div class='card'>
+<div class='card container-fluid'>
   <div class='card-header'>
     {{pageTitle}}
   </div>
@@ -53,17 +53,17 @@
     <!-- Tab panes -->
   </div>
   <div class="row"  *ngIf='currentPlayer.playerId!=0'>
-    <div class='col-sm-2'>
+    <div class='col-sm-3'>
     <button type="button"
             class="btn btn-primary" (click)='buyAsset()' 
             [disabled]='isBuyDisabled()'>Buy Asset</button>
     </div> 
-    <div>
+    <div class="col-sm-3">
       <label>Asset:
       <input type="text" [(ngModel)]='assetName'>  </label>      
     </div>
 
-    <div class='col-sm-3'>
+    <div class="col-sm-3">
       <label>Price:   
       <input type="text" [(ngModel)]='buyPrice'> </label>
     </div>
@@ -76,12 +76,12 @@
   <br>
 
   <div class="row" *ngIf='currentPlayer.playerId!=0'>
-    <div class='col-sm-2'>
+    <div class='col-sm-3'>
     <button type="button"
             class="btn btn-primary" (click)='deleteAsset()' 
             [disabled]='!assetNameDlt'>Delete Asset</button>
     </div> 
-    <div>
+    <div class='col-sm-3'>
       <label>Asset:
       <input type="text" [(ngModel)]='assetNameDlt'>  </label>      
     </div>
@@ -97,13 +97,13 @@
 
 
   <div class="row">
-    <div class='col-sm-2'>
+    <div class='col-sm-3'>
     <button type="button"
             class="btn btn-primary" (click)='payPlayer()'
             [disabled]=isPayDisabled()>Pay Rent/Exp</button>
     </div> 
 
-    <div class="dropdown">
+    <div class="dropdown col-sm-3">
 
       <label> Pay:
         <select id="players" [(ngModel)]="selectedPayPlayer">
@@ -120,11 +120,15 @@
   </div>  
 
   <br>
-  <div *ngIf='currentPlayer.playerId!=0'>
-    <button type="button"
+  <div class="row" *ngIf='currentPlayer.playerId!=0'>
+    <div class='col-sm-3'>
+      <button type="button"
             class="btn btn-primary" (click)='updateName()' [disabled]="renameField.length==0 || currentPlayer.playerName===renameField">Rename Player</button>
+    </div>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <div class='col-sm-3'>
     <input id='inp1' type="text" [(ngModel)]='renameField'>    
+    </div>
   </div> 
 
   <br>

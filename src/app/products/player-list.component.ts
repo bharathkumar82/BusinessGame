@@ -95,8 +95,8 @@ export class PlayerListComponent {
   buyAsset() {
 
     const cashAstCurrent = this.currentPlayer.assets.find(ast => ast.assetName==="Cash");
-    if(Number(cashAstCurrent)>=Number(this.buyPrice)) {
-      cashAstCurrent.value = cashAstCurrent.value - Number(this.payPrice);
+    if(Number(cashAstCurrent.value)>=Number(this.buyPrice)) {
+      cashAstCurrent.value = Number(cashAstCurrent.value) - Number(this.buyPrice);
     }
     else
     {
@@ -124,8 +124,8 @@ export class PlayerListComponent {
   payPlayer() {
     console.log(this.selectedPayPlayer);
     const cashAstCurrent = this.currentPlayer.assets.find(ast => ast.assetName==="Cash");
-    if(Number(cashAstCurrent)>=Number(this.payPrice)) {
-      cashAstCurrent.value = cashAstCurrent.value - Number(this.payPrice);
+    if(Number(cashAstCurrent.value)>=Number(this.payPrice)) {
+      cashAstCurrent.value = Number(cashAstCurrent.value) - Number(this.payPrice);
     }
     else
     {
@@ -136,9 +136,10 @@ export class PlayerListComponent {
 
     const tplayer = this.players.find(player => player.playerId===Number(this.selectedPayPlayer));
     const cashAst = tplayer.assets.find(ast => ast.assetName==="Cash");
-    cashAst.value = cashAst.value + Number(this.payPrice);
+    cashAst.value = Number(cashAst.value) + Number(this.payPrice);
     this.playerService.storePlayersOnLocalStorage(this.players);
     this.payPrice = null;
+    this.updateNetValue();
   }
 
 
