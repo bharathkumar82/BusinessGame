@@ -3,7 +3,8 @@ import { RouterModule } from '@angular/router';
 
 import { PlayerListComponent } from './player-list.component';
 import { PlayerDetailComponent } from './player-detail.component';
-import { SharedModule } from '../shared/shared.module';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { SharedModule } from '../shared/shared.module';
         component: PlayerListComponent
       }
     ]),
-    SharedModule
+    CommonModule,
+    FormsModule
   ],
   declarations: [
     PlayerListComponent,
